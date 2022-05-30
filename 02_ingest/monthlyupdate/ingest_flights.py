@@ -92,6 +92,8 @@ def upload(csvfile, bucketname, blobname):
     bucket = client.get_bucket(bucketname)
     logging.info(bucket)
     blob = Blob(blobname, bucket)
+    storage.blob._DEFAULT_CHUNKSIZE = 2097152 # 1024 * 1024 B * 2 = 2 MB
+    storage.blob._MAX_MULTIPART_SIZE = 2097152 # 2 MB
     logging.debug('Uploading {} ...'.format(csvfile))
     blob.upload_from_filename(csvfile)
     gcslocation = 'gs://{}/{}'.format(bucketname, blobname)
